@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server"
+import { query, queryOne } from "@/lib/db"
 
 export interface Category {
   id: string
@@ -32,79 +32,132 @@ export interface Product {
 }
 
 export async function getCategories(): Promise<Category[]> {
-  const supabase = await createClient()
-  const { data, error } = await supabase.from("categories").select("*").order("name")
-
-  if (error) {
+  try {
+    const categories = await query<Category>("SELECT * FROM categories ORDER BY name")
+    return categories
+  } catch (error) {
     console.error("Error fetching categories:", error)
     return []
   }
-
-  return data || []
 }
 
 export async function getProducts(categorySlug?: string): Promise<Product[]> {
-  const supabase = await createClient()
-  let query = supabase
-    .from("products")
-    .select(`
-      *,
-      category:categories(*)
-    `)
-    .eq("is_active", true)
-    .order("name")
+  try {
+    let sql = `
+      SELECT 
+        p.*,
+        c.id as category_id,
+        c.name as category_name,
+        c.slug as category_slug
+      FROM products p
+      LEFT JOIN categories c ON p.category_id = c.id
+      WHERE p.is_active = 1
+    `
+    const params: any[] = []
 
-  if (categorySlug) {
-    query = query.eq("categories.slug", categorySlug)
-  }
+    if (categorySlug) {
+      sql += " AND c.slug = ?"
+      params.push(categorySlug)
+    }
 
-  const { data, error } = await query
+    sql += " ORDER BY p.name"
 
-  if (error) {
+    const rows = await query<any>(sql, params)
+
+    return rows.map((row) => ({
+      ...row,
+      specifications: typeof row.specifications === "string" ? JSON.parse(row.specifications) : row.specifications,
+      features: typeof row.features === "string" ? JSON.parse(row.features) : row.features,
+      gallery_images: typeof row.gallery_images === "string" ? JSON.parse(row.gallery_images) : row.gallery_images,
+      is_featured: Boolean(row.is_featured),
+      is_active: Boolean(row.is_active),
+      category: row.category_id
+        ? {
+            id: row.category_id,
+            name: row.category_name,
+            slug: row.category_slug,
+          }
+        : undefined,
+    }))
+  } catch (error) {
     console.error("Error fetching products:", error)
     return []
   }
-
-  return data || []
 }
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
-  const supabase = await createClient()
-  const { data, error } = await supabase
-    .from("products")
-    .select(`
-      *,
-      category:categories(*)
-    `)
-    .eq("slug", slug)
-    .eq("is_active", true)
-    .single()
+  try {
+    const sql = `
+      SELECT 
+        p.*,
+        c.id as category_id,
+        c.name as category_name,
+        c.slug as category_slug
+      FROM products p
+      LEFT JOIN categories c ON p.category_id = c.id
+      WHERE p.slug = ? AND p.is_active = 1
+      LIMIT 1
+    `
 
-  if (error) {
+    const row = await queryOne<any>(sql, [slug])
+
+    if (!row) return null
+
+    return {
+      ...row,
+      specifications: typeof row.specifications === "string" ? JSON.parse(row.specifications) : row.specifications,
+      features: typeof row.features === "string" ? JSON.parse(row.features) : row.features,
+      gallery_images: typeof row.gallery_images === "string" ? JSON.parse(row.gallery_images) : row.gallery_images,
+      is_featured: Boolean(row.is_featured),
+      is_active: Boolean(row.is_active),
+      category: row.category_id
+        ? {
+            id: row.category_id,
+            name: row.category_name,
+            slug: row.category_slug,
+          }
+        : undefined,
+    }
+  } catch (error) {
     console.error("Error fetching product:", error)
     return null
   }
-
-  return data
 }
 
 export async function getFeaturedProducts(): Promise<Product[]> {
-  const supabase = await createClient()
-  const { data, error } = await supabase
-    .from("products")
-    .select(`
-      *,
-      category:categories(*)
-    `)
-    .eq("is_active", true)
-    .eq("is_featured", true)
-    .order("name")
-    .limit(6)
+  try {
+    const sql = `
+      SELECT 
+        p.*,
+        c.id as category_id,
+        c.name as category_name,
+        c.slug as category_slug
+      FROM products p
+      LEFT JOIN categories c ON p.category_id = c.id
+      WHERE p.is_active = 1 AND p.is_featured = 1
+      ORDER BY p.name
+      LIMIT 6
+    `
 
-  if (error) {
+    const rows = await query<any>(sql)
+
+    return rows.map((row) => ({
+      ...row,
+      specifications: typeof row.specifications === "string" ? JSON.parse(row.specifications) : row.specifications,
+      features: typeof row.features === "string" ? JSON.parse(row.features) : row.features,
+      gallery_images: typeof row.gallery_images === "string" ? JSON.parse(row.gallery_images) : row.gallery_images,
+      is_featured: Boolean(row.is_featured),
+      is_active: Boolean(row.is_active),
+      category: row.category_id
+        ? {
+            id: row.category_id,
+            name: row.category_name,
+            slug: row.category_slug,
+          }
+        : undefined,
+    }))
+  } catch (error) {
     console.error("Error fetching featured products:", error)
     return []
   }
-
-  return data || []
 }

@@ -1,30 +1,127 @@
-# nirokhorshid
+# نیروخورشید - سیستم مدیریت نیروگاه خورشیدی
 
-*Automatically synced with your [v0.app](https://v0.app) deployments*
+وب‌سایت فارسی برای ارائه خدمات طراحی و اجرای نیروگاه‌های خورشیدی با پنل مدیریت کامل.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/naeimeh-ghasemis-projects/v0-nirokhorshid)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/projects/zDBNuoNHAEm)
+## ویژگی‌ها
 
-## Overview
+### صفحات عمومی
+- 🏠 صفحه اصلی با معرفی خدمات
+- 📋 درباره ما
+- 🛠️ خدمات
+- 📦 محصولات با دسته‌بندی
+- 🏗️ نمونه پروژه‌ها
+- 📞 تماس با ما
 
-This repository will stay in sync with your deployed chats on [v0.app](https://v0.app).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
+### پنل مدیریت
+- ✅ مدیریت محصولات (افزودن، ویرایش، حذف)
+- ✅ مدیریت دسته‌بندی‌ها
+- ✅ مدیریت پروژه‌ها
+- ✅ مدیریت خدمات
+- ✅ مشاهده پیام‌های تماس
+- ✅ تنظیمات سایت
 
-## Deployment
+### ویژگی‌های فنی
+- ⚡ Next.js 15 با App Router
+- 🎨 طراحی مدرن با Tailwind CSS
+- 🔄 RTL کامل برای زبان فارسی
+- 📱 طراحی ریسپانسیو
+- 🔍 بهینه‌سازی SEO
+- 🗄️ پایگاه داده MySQL
+- 🔐 احراز هویت مدیر
 
-Your project is live at:
+## نصب و راه‌اندازی
 
-**[https://vercel.com/naeimeh-ghasemis-projects/v0-nirokhorshid](https://vercel.com/naeimeh-ghasemis-projects/v0-nirokhorshid)**
+### 1. کلون کردن پروژه
 
-## Build your app
+\`\`\`bash
+git clone <repository-url>
+cd nirokhorshid
+\`\`\`
 
-Continue building your app on:
+### 2. نصب وابستگی‌ها
 
-**[https://v0.app/chat/projects/zDBNuoNHAEm](https://v0.app/chat/projects/zDBNuoNHAEm)**
+\`\`\`bash
+npm install
+# یا
+yarn install
+\`\`\`
 
-## How It Works
+### 3. راه‌اندازی پایگاه داده
 
-1. Create and modify your project using [v0.app](https://v0.app)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+مراحل کامل در فایل [DATABASE_SETUP.md](./DATABASE_SETUP.md) توضیح داده شده است.
+
+خلاصه:
+1. پایگاه داده MySQL ایجاد کنید
+2. فایل `database/nirokhorshid_complete.sql` را اجرا کنید
+3. فایل `.env.local` را با اطلاعات پایگاه داده پر کنید
+
+### 4. تنظیم متغیرهای محیطی
+
+فایل `.env.local` ایجاد کنید:
+
+\`\`\`env
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=your_password
+DB_NAME=nirokhorshid
+\`\`\`
+
+### 5. اجرای پروژه
+
+\`\`\`bash
+npm run dev
+\`\`\`
+
+سایت روی `http://localhost:3000` در دسترس است.
+
+## ورود به پنل مدیریت
+
+- آدرس: `http://localhost:3000/admin/login`
+- ایمیل: `admin@nirokhorshid.com`
+- رمز عبور: `admin123456`
+
+⚠️ **مهم:** حتماً رمز عبور را بعد از اولین ورود تغییر دهید!
+
+## ساختار پروژه
+
+\`\`\`
+nirokhorshid/
+├── app/                    # صفحات Next.js
+│   ├── page.tsx           # صفحه اصلی
+│   ├── about/             # درباره ما
+│   ├── services/          # خدمات
+│   ├── products/          # محصولات
+│   ├── projects/          # پروژه‌ها
+│   ├── contact/           # تماس با ما
+│   └── admin/             # پنل مدیریت
+├── components/            # کامپوننت‌های React
+├── lib/                   # توابع کمکی
+│   ├── db.ts             # اتصال به MySQL
+│   ├── products.ts       # توابع محصولات
+│   └── projects.ts       # توابع پروژه‌ها
+├── database/             # فایل‌های SQL
+│   └── nirokhorshid_complete.sql
+└── public/               # فایل‌های استاتیک
+\`\`\`
+
+## استقرار (Deployment)
+
+### Vercel
+\`\`\`bash
+vercel
+\`\`\`
+
+### هاست اشتراکی
+1. فایل‌های پروژه را آپلود کنید
+2. پایگاه داده MySQL ایجاد کنید
+3. اسکریپت SQL را اجرا کنید
+4. متغیرهای محیطی را تنظیم کنید
+5. `npm run build` را اجرا کنید
+
+## پشتیبانی
+
+برای سوالات و مشکلات، لطفاً یک Issue ایجاد کنید.
+
+## لایسنس
+
+MIT

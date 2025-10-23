@@ -1,9 +1,10 @@
-import { createServerClient } from "@/lib/supabase/server"
+import { query, queryOne } from "@/lib/db"
 
 export interface Project {
   id: string
   title: string
   description: string
+  short_description?: string
   image_url: string
   project_type: string
   location: string
@@ -13,59 +14,75 @@ export interface Project {
   features: string[]
   gallery_images: string[]
   slug: string
+  is_published: boolean
   created_at: string
   updated_at: string
 }
 
 export async function getProjects(): Promise<Project[]> {
-  const supabase = await createServerClient()
+  try {
+    const sql = `
+      SELECT * FROM projects 
+      WHERE is_published = 1 
+      ORDER BY completion_date DESC
+    `
 
-  const { data: projects, error } = await supabase
-    .from("projects")
-    .select("*")
-    .eq("is_published", true)
-    .order("completion_date", { ascending: false })
+    const rows = await query<any>(sql)
 
-  if (error) {
+    return rows.map((row) => ({
+      ...row,
+      features: typeof row.features === "string" ? JSON.parse(row.features) : row.features,
+      gallery_images: typeof row.gallery_images === "string" ? JSON.parse(row.gallery_images) : row.gallery_images,
+      is_published: Boolean(row.is_published),
+    }))
+  } catch (error) {
     console.error("Error fetching projects:", error)
     return []
   }
-
-  return projects || []
 }
 
 export async function getProjectBySlug(slug: string): Promise<Project | null> {
-  const supabase = await createServerClient()
+  try {
+    const sql = `
+      SELECT * FROM projects 
+      WHERE slug = ? AND is_published = 1 
+      LIMIT 1
+    `
 
-  const { data: project, error } = await supabase
-    .from("projects")
-    .select("*")
-    .eq("slug", slug)
-    .eq("is_published", true)
-    .single()
+    const row = await queryOne<any>(sql, [slug])
 
-  if (error) {
+    if (!row) return null
+
+    return {
+      ...row,
+      features: typeof row.features === "string" ? JSON.parse(row.features) : row.features,
+      gallery_images: typeof row.gallery_images === "string" ? JSON.parse(row.gallery_images) : row.gallery_images,
+      is_published: Boolean(row.is_published),
+    }
+  } catch (error) {
     console.error("Error fetching project:", error)
     return null
   }
-
-  return project
 }
 
 export async function getProjectsByType(projectType: string): Promise<Project[]> {
-  const supabase = await createServerClient()
+  try {
+    const sql = `
+      SELECT * FROM projects 
+      WHERE project_type = ? AND is_published = 1 
+      ORDER BY completion_date DESC
+    `
 
-  const { data: projects, error } = await supabase
-    .from("projects")
-    .select("*")
-    .eq("project_type", projectType)
-    .eq("is_published", true)
-    .order("completion_date", { ascending: false })
+    const rows = await query<any>(sql, [projectType])
 
-  if (error) {
+    return rows.map((row) => ({
+      ...row,
+      features: typeof row.features === "string" ? JSON.parse(row.features) : row.features,
+      gallery_images: typeof row.gallery_images === "string" ? JSON.parse(row.gallery_images) : row.gallery_images,
+      is_published: Boolean(row.is_published),
+    }))
+  } catch (error) {
     console.error("Error fetching projects by type:", error)
     return []
   }
-
-  return projects || []
 }
