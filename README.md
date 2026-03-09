@@ -1,127 +1,190 @@
-# نیروخورشید - سیستم مدیریت نیروگاه خورشیدی
+# NiroKhorshid – Solar Power Plant Management System
 
-وب‌سایت فارسی برای ارائه خدمات طراحی و اجرای نیروگاه‌های خورشیدی با پنل مدیریت کامل.
+**NiroKhorshid** (meaning *Solar Power* in Persian) is a Persian web application designed to present **solar power plant design and implementation services**.
+The platform includes a public website for customers and a complete **admin panel** for managing content, products, and projects.
 
-## ویژگی‌ها
+---
 
-### صفحات عمومی
-- 🏠 صفحه اصلی با معرفی خدمات
-- 📋 درباره ما
-- 🛠️ خدمات
-- 📦 محصولات با دسته‌بندی
-- 🏗️ نمونه پروژه‌ها
-- 📞 تماس با ما
+# Features
 
-### پنل مدیریت
-- ✅ مدیریت محصولات (افزودن، ویرایش، حذف)
-- ✅ مدیریت دسته‌بندی‌ها
-- ✅ مدیریت پروژه‌ها
-- ✅ مدیریت خدمات
-- ✅ مشاهده پیام‌های تماس
-- ✅ تنظیمات سایت
+## Public Website
 
-### ویژگی‌های فنی
-- ⚡ Next.js 15 با App Router
-- 🎨 طراحی مدرن با Tailwind CSS
-- 🔄 RTL کامل برای زبان فارسی
-- 📱 طراحی ریسپانسیو
-- 🔍 بهینه‌سازی SEO
-- 🗄️ پایگاه داده MySQL
-- 🔐 احراز هویت مدیر
+* 🏠 Home page introducing solar energy services
+* 📋 About Us page
+* 🛠️ Services overview
+* 📦 Products with category support
+* 🏗️ Project portfolio
+* 📞 Contact page for customer inquiries
 
-## نصب و راه‌اندازی
+## Admin Panel
 
-### 1. کلون کردن پروژه
+* Product management (create, edit, delete)
+* Category management
+* Project management
+* Service management
+* Viewing and managing contact messages
+* Site configuration settings
 
-\`\`\`bash
-git clone <repository-url>
+---
+
+# Technical Stack
+
+Frontend
+
+* **Next.js 15 (App Router)**
+* **React**
+* **Tailwind CSS**
+
+Features
+
+* Full **RTL support** for Persian language
+* **Responsive design** for mobile and desktop
+* **SEO optimization**
+
+Backend / Data
+
+* **MySQL Database**
+* Server-side logic with **Next.js**
+
+---
+
+# Installation
+
+## 1. Clone the repository
+
+```bash
+git clone https://github.com/ghaseminaeeme/nirokhorshid.git
 cd nirokhorshid
-\`\`\`
+```
 
-### 2. نصب وابستگی‌ها
+## 2. Install dependencies
 
-\`\`\`bash
+```bash
 npm install
-# یا
+# or
 yarn install
-\`\`\`
+```
 
-### 3. راه‌اندازی پایگاه داده
+---
 
-مراحل کامل در فایل [DATABASE_SETUP.md](./DATABASE_SETUP.md) توضیح داده شده است.
+# Database Setup
 
-خلاصه:
-1. پایگاه داده MySQL ایجاد کنید
-2. فایل `database/nirokhorshid_complete.sql` را اجرا کنید
-3. فایل `.env.local` را با اطلاعات پایگاه داده پر کنید
+Detailed instructions are available in:
 
-### 4. تنظیم متغیرهای محیطی
+`DATABASE_SETUP.md`
 
-فایل `.env.local` ایجاد کنید:
+Quick steps:
 
-\`\`\`env
+1. Create a **MySQL database**
+2. Run the SQL script located in:
+
+```
+database/nirokhorshid_complete.sql
+```
+
+3. Configure the environment variables.
+
+---
+
+# Environment Variables
+
+Create a file named:
+
+```
+.env.local
+```
+
+Example configuration:
+
+```env
 DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=your_password
 DB_NAME=nirokhorshid
-\`\`\`
+```
 
-### 5. اجرای پروژه
+---
 
-\`\`\`bash
+# Run the Development Server
+
+```bash
 npm run dev
-\`\`\`
+```
 
-سایت روی `http://localhost:3000` در دسترس است.
+The application will be available at:
 
-## ورود به پنل مدیریت
+```
+http://localhost:3000
+```
 
-- آدرس: `http://localhost:3000/admin/login`
-- ایمیل: `admin@nirokhorshid.com`
-- رمز عبور: `admin123456`
+---
 
-⚠️ **مهم:** حتماً رمز عبور را بعد از اولین ورود تغییر دهید!
+# Project Structure
 
-## ساختار پروژه
-
-\`\`\`
-nirokhorshid/
-├── app/                    # صفحات Next.js
-│   ├── page.tsx           # صفحه اصلی
-│   ├── about/             # درباره ما
-│   ├── services/          # خدمات
-│   ├── products/          # محصولات
-│   ├── projects/          # پروژه‌ها
-│   ├── contact/           # تماس با ما
-│   └── admin/             # پنل مدیریت
-├── components/            # کامپوننت‌های React
-├── lib/                   # توابع کمکی
-│   ├── db.ts             # اتصال به MySQL
-│   ├── products.ts       # توابع محصولات
-│   └── projects.ts       # توابع پروژه‌ها
-├── database/             # فایل‌های SQL
+```
+nirokhorshid
+│
+├── app/                # Next.js App Router pages
+│   ├── page.tsx        # Home page
+│   ├── about/
+│   ├── services/
+│   ├── products/
+│   ├── projects/
+│   ├── contact/
+│   └── admin/          # Admin dashboard
+│
+├── components/         # React components
+│
+├── lib/                # Utility and database logic
+│   ├── db.ts           # MySQL connection
+│   ├── products.ts
+│   └── projects.ts
+│
+├── database/           # SQL files
 │   └── nirokhorshid_complete.sql
-└── public/               # فایل‌های استاتیک
-\`\`\`
+│
+└── public/             # Static assets
+```
 
-## استقرار (Deployment)
+---
 
-### Vercel
-\`\`\`bash
+# Deployment
+
+## Deploy on Vercel
+
+```bash
 vercel
-\`\`\`
+```
 
-### هاست اشتراکی
-1. فایل‌های پروژه را آپلود کنید
-2. پایگاه داده MySQL ایجاد کنید
-3. اسکریپت SQL را اجرا کنید
-4. متغیرهای محیطی را تنظیم کنید
-5. `npm run build` را اجرا کنید
+## Deploy on Shared Hosting
 
-## پشتیبانی
+1. Upload the project files
+2. Create a MySQL database
+3. Run the SQL script
+4. Configure environment variables
+5. Build the project
 
-برای سوالات و مشکلات، لطفاً یک Issue ایجاد کنید.
+```bash
+npm run build
+```
 
-## لایسنس
+---
 
-MIT
+---
+
+# Contributing
+
+Contributions are welcome.
+
+If you'd like to improve the project:
+
+1. Fork the repository
+2. Create a new branch
+3. Commit your changes
+4. Submit a Pull Request
+
+---
+
+# License
+
+MIT License
